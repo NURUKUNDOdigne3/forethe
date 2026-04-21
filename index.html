@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forêt H.E Inc. — Forestry Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest: #1B3A2D;
+    --forest-mid: #2D5A42;
+    --forest-light: #3E7A59;
+    --sage: #7CB897;
+    --gold: #C9973A;
+    --gold-light: #E0B96A;
+    --cream: #F7F3EC;
+    --cream-dark: #EDE8DF;
+    --charcoal: #1A1A1A;
+    --text-muted: #6B7B6E;
+    --white: #FFFFFF;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--cream);
+    color: var(--charcoal);
+    overflow-x: hidden;
+  }
+
+  /* ── NAVBAR ── */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 1000;
+    padding: 1.2rem 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: all 0.4s ease;
+    background: transparent;
+  }
+  nav.scrolled {
+    background: rgba(27, 58, 45, 0.97);
+    backdrop-filter: blur(12px);
+    padding: 0.9rem 5%;
+    box-shadow: 0 2px 30px rgba(0,0,0,0.25);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem; font-weight: 600;
+    color: var(--white); letter-spacing: 0.05em;
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
+  .nav-links a {
+    color: rgba(255,255,255,0.85); text-decoration: none;
+    font-size: 0.9rem; font-weight: 400; letter-spacing: 0.08em;
+    text-transform: uppercase; transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold-light); }
+  .nav-cta {
+    background: var(--gold); color: var(--white) !important;
+    padding: 0.55rem 1.4rem; border-radius: 2px;
+    font-weight: 500 !important;
+    transition: background 0.3s !important;
+  }
+  .nav-cta:hover { background: var(--gold-light) !important; color: var(--charcoal) !important; }
+  .lang-toggle {
+    display: none;
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+    color: white; padding: 0.3rem 0.8rem; border-radius: 2px;
+    cursor: pointer; font-family: 'Outfit', sans-serif;
+    font-size: 0.8rem; letter-spacing: 0.05em; transition: all 0.3s;
+  }
+  .lang-toggle:hover { background: rgba(255,255,255,0.25); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh; position: relative;
+    display: flex; align-items: center; justify-content: flex-start;
+    overflow: hidden;
+  }
+  .hero-slides {
+    position: absolute; inset: 0; z-index: 0;
+  }
+  .hero-slide {
+    position: absolute; inset: 0;
+    background-size: cover; background-position: center; background-repeat: no-repeat;
+    opacity: 0; transition: opacity 1.2s ease-in-out;
+  }
+  .hero-slide.active { opacity: 1; }
+  .hero-slide::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(160deg, rgba(13,34,24,0.72) 0%, rgba(27,58,45,0.68) 40%, rgba(45,90,66,0.65) 80%, rgba(26,53,38,0.72) 100%);
+  }
+  .hero-dots {
+    position: absolute; bottom: 3.5rem; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 0.55rem; z-index: 3;
+  }
+  .hero-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: rgba(255,255,255,0.3); border: 1px solid rgba(255,255,255,0.5);
+    cursor: pointer; transition: background 0.3s, transform 0.3s;
+  }
+  .hero-dot.active { background: var(--gold); border-color: var(--gold); transform: scale(1.3); }
+  .hero-pattern {
+    position: absolute; inset: 0; opacity: 0.06;
+    background-image: repeating-linear-gradient(
+      45deg, transparent, transparent 40px,
+      rgba(255,255,255,0.5) 40px, rgba(255,255,255,0.5) 41px
+    );
+  }
+  .hero-trees {
+    display: none;
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 35%; opacity: 0.12;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300'%3E%3Cpolygon points='0,300 60,80 120,300' fill='%23fff'/%3E%3Cpolygon points='80,300 140,60 200,300' fill='%23fff'/%3E%3Cpolygon points='160,300 220,90 280,300' fill='%23fff'/%3E%3Cpolygon points='240,300 300,50 360,300' fill='%23fff'/%3E%3Cpolygon points='320,300 380,75 440,300' fill='%23fff'/%3E%3Cpolygon points='400,300 460,55 520,300' fill='%23fff'/%3E%3Cpolygon points='480,300 540,80 600,300' fill='%23fff'/%3E%3Cpolygon points='560,300 620,65 680,300' fill='%23fff'/%3E%3Cpolygon points='640,300 700,85 760,300' fill='%23fff'/%3E%3Cpolygon points='720,300 780,50 840,300' fill='%23fff'/%3E%3Cpolygon points='800,300 860,70 920,300' fill='%23fff'/%3E%3Cpolygon points='880,300 940,55 1000,300' fill='%23fff'/%3E%3Cpolygon points='960,300 1020,80 1080,300' fill='%23fff'/%3E%3Cpolygon points='1040,300 1100,60 1160,300' fill='%23fff'/%3E%3Cpolygon points='1120,300 1180,75 1240,300' fill='%23fff'/%3E%3C/svg%3E") repeat-x bottom;
+    background-size: auto 100%;
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    text-align: left; padding: 1rem 0 1rem 5%;
+    max-width: 600px;
+    animation: fadeUp 1s ease both;
+    display: flex; flex-direction: column; align-items: flex-start; justify-content: center;
+    margin-right: auto;
+  }
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: 0.85rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold-light); font-weight: 500;
+    border-top: 1px solid var(--gold); border-bottom: 1px solid var(--gold);
+    padding: 0.35rem 1rem; margin-bottom: 1rem;
+    margin-left: 0;
+  }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 300; line-height: 1.1;
+    color: var(--white); margin-bottom: 1.2rem;
+    letter-spacing: -0.01em;
+  }
+  .hero h1 em { font-style: italic; color: var(--sage); }
+  .hero-sub {
+    font-size: clamp(1rem, 1.8vw, 1.15rem); color: rgba(255,255,255,0.7);
+    max-width: 560px; margin: 0 0 1.5rem 0; line-height: 1.6;
+    font-weight: 300;
+  }
+  .hero-btns { display: flex; gap: 0.6rem; justify-content: flex-start; flex-wrap: wrap; margin-bottom: 0.5rem; }
+  .btn-primary {
+    background: var(--gold); color: var(--white);
+    padding: 0.9rem 2rem; text-decoration: none;
+    font-size: 0.9rem; letter-spacing: 0.08em; text-transform: uppercase;
+    font-weight: 500; transition: all 0.3s; border-radius: 2px;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--gold-light); color: var(--charcoal); transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent; color: var(--white);
+    border: 1px solid rgba(255,255,255,0.5);
+    padding: 0.9rem 2rem; text-decoration: none;
+    font-size: 0.9rem; letter-spacing: 0.08em; text-transform: uppercase;
+    font-weight: 400; transition: all 0.3s; border-radius: 2px;
+    display: inline-block;
+  }
+  .btn-outline:hover { border-color: white; background: rgba(255,255,255,0.1); transform: translateY(-2px); }
+  .hero-scroll {
+    position: absolute; bottom: 1rem; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
+    color: rgba(255,255,255,0.4); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase;
+    animation: bounce 2s infinite;
+  }
+  .hero-scroll::after {
+    content: ''; width: 1px; height: 50px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.4), transparent);
+  }
+
+  /* ── STATS BAND ── */
+  .stats-band {
+    background: var(--forest);
+    padding: 3rem 5%;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+  .stat-item {
+    text-align: center; padding: 1rem 2rem;
+    border-right: 1px solid rgba(255,255,255,0.12);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem; font-weight: 300; color: var(--gold);
+    line-height: 1; display: block;
+  }
+  .stat-label {
+    font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.55); margin-top: 0.5rem; display: block;
+    font-weight: 400;
+  }
+
+  /* ── SECTIONS ── */
+  section { padding: 6rem 5%; }
+  .section-label {
+    font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.2em;
+    color: var(--gold); font-weight: 500; margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .section-label::before {
+    content: ''; width: 30px; height: 1px; background: var(--gold);
+  }
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 300; line-height: 1.15; color: var(--forest);
+  }
+  h2 em { font-style: italic; color: var(--forest-light); }
+
+  /* ── MISSION ── */
+  .mission { background: var(--cream); }
+  .mission-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 6rem; align-items: center; max-width: 1200px; margin: 0 auto;
+  }
+  .mission-text { }
+  .mission-text h2 { margin-bottom: 2rem; }
+  .mission-body {
+    font-size: 1.05rem; line-height: 1.9; color: #4a5a4e;
+    font-weight: 300; margin-bottom: 2.5rem;
+  }
+  .mission-visual {
+    position: relative;
+  }
+  .mission-card {
+    background: var(--forest);
+    padding: 3.5rem; border-radius: 4px;
+    position: relative; overflow: hidden;
+  }
+  .mission-card::before {
+    content: ''; position: absolute; top: 0; right: 0;
+    width: 120px; height: 120px;
+    border-left: 1px solid rgba(201,151,58,0.3);
+    border-bottom: 1px solid rgba(201,151,58,0.3);
+    border-bottom-left-radius: 4px;
+  }
+  .mission-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem; font-style: italic; font-weight: 300;
+    color: var(--white); line-height: 1.6; margin-bottom: 2rem;
+  }
+  .mission-quote::before { content: '\201C'; color: var(--gold); font-size: 3rem; line-height: 0; vertical-align: -0.5em; margin-right: 0.3rem; }
+  .mission-author {
+    font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.15em;
+    color: var(--gold-light); font-weight: 500;
+  }
+  .badge-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem;
+  }
+  .badge {
+    background: var(--cream-dark); padding: 1.2rem 1.5rem; border-radius: 4px;
+    border-left: 3px solid var(--gold);
+  }
+  .badge-title {
+    font-weight: 600; font-size: 0.85rem; color: var(--forest); margin-bottom: 0.3rem;
+  }
+  .badge-sub { font-size: 0.8rem; color: var(--text-muted); }
+
+  /* ── SERVICES ── */
+  .services { background: var(--forest); }
+  .services .section-label { color: var(--gold-light); }
+  .services .section-label::before { background: var(--gold-light); }
+  .services h2 { color: var(--white); margin-bottom: 3.5rem; }
+  .services h2 em { color: var(--sage); }
+  .services-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1.5px; background: rgba(255,255,255,0.08);
+    border-radius: 4px; overflow: hidden;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .service-card {
+    background: var(--forest);
+    padding: 2.5rem 2rem;
+    transition: background 0.3s; cursor: default;
+    position: relative; overflow: hidden;
+  }
+  .service-card:hover { background: var(--forest-mid); }
+  .service-card::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 3px; background: var(--gold);
+    transform: scaleX(0); transition: transform 0.3s;
+    transform-origin: left;
+  }
+  .service-card:hover::after { transform: scaleX(1); }
+  .service-icon {
+    width: 52px; height: 52px; background: rgba(201,151,58,0.15);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+  .service-icon svg { width: 24px; height: 24px; fill: var(--gold); }
+  .service-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem; font-weight: 400; color: var(--white);
+    margin-bottom: 1rem; line-height: 1.3;
+  }
+  .service-desc {
+    font-size: 0.875rem; color: rgba(255,255,255,0.55);
+    line-height: 1.8; font-weight: 300;
+  }
+
+  /* ── GALLERY ── */
+  .gallery { background: var(--cream-dark); }
+  .gallery-header { max-width: 600px; margin-bottom: 3rem; }
+  .gallery-header h2 { margin-bottom: 1rem; }
+  .gallery-sub { color: var(--text-muted); font-size: 1rem; line-height: 1.7; font-weight: 300; }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: 220px 220px;
+    gap: 12px; max-width: 1200px; margin: 0 auto;
+  }
+  .gal-item {
+    border-radius: 4px; overflow: hidden;
+    position: relative; background: var(--forest);
+    cursor: pointer;
+  }
+  .gal-item:hover .gal-overlay { opacity: 1; }
+  .gal-overlay {
+    position: absolute; inset: 0;
+    background: rgba(27,58,45,0.6);
+    opacity: 0; transition: opacity 0.3s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .gal-overlay span {
+    color: white; font-size: 0.75rem; letter-spacing: 0.15em;
+    text-transform: uppercase; font-weight: 500;
+  }
+  .gal-item:nth-child(1) { grid-column: span 5; }
+  .gal-item:nth-child(2) { grid-column: span 4; }
+  .gal-item:nth-child(3) { grid-column: span 3; }
+  .gal-item:nth-child(4) { grid-column: span 3; }
+  .gal-item:nth-child(5) { grid-column: span 5; }
+  .gal-item:nth-child(6) { grid-column: span 4; }
+
+  .gal-img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  .gal-item:hover .gal-img { transform: scale(1.05); }
+
+  /* ── WHY US ── */
+  .why { background: var(--cream); overflow: hidden; }
+  .why-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start;
+  }
+  .why h2 { margin-bottom: 2rem; }
+  .why-list { list-style: none; display: flex; flex-direction: column; gap: 0; }
+  .why-item {
+    display: flex; gap: 1.5rem; align-items: flex-start;
+    padding: 1.8rem 0; border-bottom: 1px solid var(--cream-dark);
+  }
+  .why-item:first-child { border-top: 1px solid var(--cream-dark); }
+  .why-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem; font-weight: 300; color: var(--gold); opacity: 0.5;
+    flex-shrink: 0; width: 2.5rem;
+  }
+  .why-text h3 { font-weight: 600; font-size: 1rem; color: var(--forest); margin-bottom: 0.4rem; }
+  .why-text p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; font-weight: 300; }
+
+  .cta-card {
+    background: var(--forest); padding: 3.5rem;
+    border-radius: 4px; position: sticky; top: 120px;
+  }
+  .cta-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem; font-weight: 300; color: var(--white); margin-bottom: 1rem; line-height: 1.3;
+  }
+  .cta-card p { color: rgba(255,255,255,0.6); font-size: 0.9rem; line-height: 1.8; margin-bottom: 2rem; font-weight: 300; }
+  .cta-card .btn-primary { width: 100%; text-align: center; display: block; margin-bottom: 1rem; }
+  .cta-contact { color: rgba(255,255,255,0.4); font-size: 0.8rem; text-align: center; }
+  .cta-contact a { color: var(--gold-light); text-decoration: none; }
+
+  /* ── CONTACT ── */
+  .contact { background: var(--forest); }
+  .contact .section-label { color: var(--gold-light); }
+  .contact .section-label::before { background: var(--gold-light); }
+  .contact h2 { color: white; margin-bottom: 3.5rem; }
+  .contact h2 em { color: var(--sage); }
+  .contact-grid {
+    display: grid; grid-template-columns: 1fr 1.4fr; gap: 5rem;
+    max-width: 1200px; margin: 0 auto; align-items: start;
+  }
+  .contact-info { }
+  .contact-item {
+    display: flex; gap: 1.2rem; align-items: flex-start;
+    margin-bottom: 2rem; padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .contact-item:last-child { border-bottom: none; }
+  .contact-icon {
+    width: 44px; height: 44px; flex-shrink: 0;
+    background: rgba(201,151,58,0.12);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  }
+  .contact-icon svg { width: 18px; height: 18px; fill: var(--gold); }
+  .contact-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--gold-light); font-weight: 500; margin-bottom: 0.3rem; }
+  .contact-val { color: rgba(255,255,255,0.8); font-size: 0.95rem; font-weight: 300; }
+  .contact-val a { color: rgba(255,255,255,0.8); text-decoration: none; }
+  .contact-val a:hover { color: var(--gold-light); }
+
+  .contact-form { }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  .form-group { display: flex; flex-direction: column; margin-bottom: 1rem; }
+  .form-group label {
+    font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.45); margin-bottom: 0.5rem; font-weight: 500;
+  }
+  .form-group input, .form-group textarea, .form-group select {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: white; padding: 0.85rem 1rem;
+    border-radius: 2px; font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem; transition: border-color 0.3s; outline: none;
+    font-weight: 300;
+  }
+  .form-group input::placeholder, .form-group textarea::placeholder { color: rgba(255,255,255,0.2); }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+    border-color: var(--gold);
+  }
+  .form-group textarea { height: 130px; resize: vertical; }
+  .form-group select { appearance: none; cursor: pointer; }
+  .form-group select option { background: var(--forest); color: white; }
+  .btn-submit {
+    background: var(--gold); color: white;
+    border: none; padding: 1rem 2.5rem;
+    font-family: 'Outfit', sans-serif; font-size: 0.9rem;
+    letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500;
+    cursor: pointer; border-radius: 2px; transition: all 0.3s; width: 100%;
+  }
+  .btn-submit:hover { background: var(--gold-light); color: var(--charcoal); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #0e2219;
+    padding: 3rem 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1.5rem;
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; color: white; font-weight: 400;
+  }
+  .footer-logo span { color: var(--gold); }
+  .footer-copy { color: rgba(255,255,255,0.3); font-size: 0.8rem; }
+  .footer-links { display: flex; gap: 2rem; }
+  .footer-links a { color: rgba(255,255,255,0.4); font-size: 0.8rem; text-decoration: none; transition: color 0.3s; }
+  .footer-links a:hover { color: var(--gold-light); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+  .reveal {
+    opacity: 0; transform: translateY(25px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .stats-band { grid-template-columns: repeat(2, 1fr); }
+    .mission-grid, .why-inner, .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .services-grid { grid-template-columns: repeat(2, 1fr); }
+    .gallery-grid { grid-template-columns: repeat(6, 1fr); grid-template-rows: 180px 180px; }
+    .gal-item:nth-child(1) { grid-column: span 3; }
+    .gal-item:nth-child(2) { grid-column: span 3; }
+    .gal-item:nth-child(3) { grid-column: span 2; }
+    .gal-item:nth-child(4) { grid-column: span 2; }
+    .gal-item:nth-child(5) { grid-column: span 2; }
+    .gal-item:nth-child(6) { grid-column: span 6; }
+    .nav-links { display: none; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+
+  /* Hidden content for lang switch */
+  [data-lang="fr"] { display: none; }
+  [data-lang="en"] { display: block; }
+
+  /* Gallery placeholder colors (when images don't load) */
+  .gal-item:nth-child(1) { background: #2D5A42; }
+  .gal-item:nth-child(2) { background: #1B3A2D; }
+  .gal-item:nth-child(3) { background: #3E7A59; }
+  .gal-item:nth-child(4) { background: #254d38; }
+  .gal-item:nth-child(5) { background: #2D5A42; }
+  .gal-item:nth-child(6) { background: #1B3A2D; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo"><img src="imgs/logo.png" alt="Forêt H.E Inc. Logo" style="height: 45px; width: auto;"></a>
+  <ul class="nav-links">
+    <li><a href="#home" data-en="Home">Home</a></li>
+    <li><a href="services.html" data-en="Services">Services</a></li>
+    <li><a href="#about" data-en="About us">About us</a></li>
+    <li><a href="#team" data-en="Team">Team</a></li>
+    <li><a href="#contact" class="nav-cta" data-en="Contact us">Contact us</a></li>
+  </ul>
+  <button class="lang-toggle" id="langBtn">EN</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-slides">
+    <div class="hero-slide active" style="background-image: url('imgs/hero_image.png')"></div>
+    <div class="hero-slide" style="background-image: url('imgs/hero_image_2.png')"></div>
+    <div class="hero-slide" style="background-image: url('imgs/hero_image_3.png')"></div>
+  </div>
+  <div class="hero-pattern"></div>
+  <div class="hero-trees"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span>Gatineau, Québec · Canada</span>
+    </div>
+    <h1>Forestry<em>excellence</em>,<br>at your service</h1>
+    <p class="hero-sub">Forêt H.E Inc. delivers professional forestry management services with a skilled, safe, and dedicated workforce.</p>
+    <div class="hero-btns">
+      <a href="#services" class="btn-primary">Our services</a>
+      <a href="#contact" class="btn-outline">Get a quote</a>
+    </div>
+  </div>
+  <div class="hero-dots" id="heroDots">
+    <div class="hero-dot active" onclick="goToSlide(0)"></div>
+    <div class="hero-dot" onclick="goToSlide(1)"></div>
+    <div class="hero-dot" onclick="goToSlide(2)"></div>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- STATS BAND -->
+<div class="stats-band">
+  <div class="stat-item reveal">
+    <span class="stat-num" data-target="6">0</span>
+    <span class="stat-label">Years of experience</span>
+  </div>
+  <div class="stat-item reveal reveal-delay-1">
+    <span class="stat-num" data-target="500">0</span>
+    <span class="stat-label">Projects completed</span>
+  </div>
+  <div class="stat-item reveal reveal-delay-2">
+    <span class="stat-num" data-target="100">0</span>
+    <span class="stat-label">% Safety first</span>
+  </div>
+  <div class="stat-item reveal reveal-delay-3">
+    <span class="stat-num" data-target="3">0</span>
+    <span class="stat-label">Regions served</span>
+  </div>
+</div>
+
+<!-- MISSION -->
+<section class="mission" id="mission">
+  <div class="mission-grid">
+    <div class="mission-text reveal">
+      <div class="section-label">
+        <span data-lang="fr">À propos</span>
+        <span data-lang="en">About us</span>
+      </div>
+      <h2>
+        <span data-lang="fr">Notre <em>mission</em> au cœur de la forêt</span>
+        <span data-lang="en">Our <em>mission</em> at the heart of the forest</span>
+      </h2>
+      <p class="mission-body">
+        <span data-lang="fr">Forêt H.E Inc. vise à contribuer au développement présent et futur de la forêt publique, privée et les poteaux d'Hydro-Québec par un entretien actif de leurs boisés, dans l'intérêt des propriétaires et des communautés rurales.</span>
+        <span data-lang="en">Forêt H.E Inc. aims to contribute to the present and future development of public and private forests and Hydro-Québec poles through active maintenance of their woodlands, in the interest of landowners and rural communities.</span>
+      </p>
+      <div class="badge-grid">
+        <div class="badge">
+          <div class="badge-title">
+            <span data-lang="fr">Forêt publique</span>
+            <span data-lang="en">Public forest</span>
+          </div>
+          <div class="badge-sub">
+            <span data-lang="fr">Entretien et aménagement</span>
+            <span data-lang="en">Maintenance & management</span>
+          </div>
+        </div>
+        <div class="badge">
+          <div class="badge-title">
+            <span data-lang="fr">Forêt privée</span>
+            <span data-lang="en">Private forest</span>
+          </div>
+          <div class="badge-sub">
+            <span data-lang="fr">Solutions personnalisées</span>
+            <span data-lang="en">Customized solutions</span>
+          </div>
+        </div>
+        <div class="badge">
+          <div class="badge-title">Hydro-Québec</div>
+          <div class="badge-sub">
+            <span data-lang="fr">Entretien des lignes</span>
+            <span data-lang="en">Line maintenance</span>
+          </div>
+        </div>
+        <div class="badge">
+          <div class="badge-title">
+            <span data-lang="fr">Main-d'œuvre qualifiée</span>
+            <span data-lang="en">Qualified workforce</span>
+          </div>
+          <div class="badge-sub">
+            <span data-lang="fr">Certifiée et sécuritaire</span>
+            <span data-lang="en">Certified & safe</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mission-visual reveal reveal-delay-2">
+      <div class="mission-card">
+        <p class="mission-quote">
+          <span data-lang="fr">Offrir un service de qualité adéquate d'aménagement forestier par une main-d'œuvre compétente et sécuritaire.</span>
+          <span data-lang="en">To provide quality forestry management services through a skilled and safety-focused workforce.</span>
+        </p>
+        <div class="mission-author">
+          <span data-lang="fr">— Notre mission fondatrice</span>
+          <span data-lang="en">— Our founding mission</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="section-label">
+    <span data-lang="fr">Ce que nous faisons</span>
+    <span data-lang="en">What we do</span>
+  </div>
+  <h2>
+    <span data-lang="fr">Traitements <em>sylvicoles</em> professionnels</span>
+    <span data-lang="en">Professional <em>silvicultural</em> treatments</span>
+  </h2>
+  <br><br>
+  <div class="services-grid">
+
+    <div class="service-card reveal">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M17 8C8 10 5.9 16.17 3.82 21H5.71C6.51 19.13 7.81 16.64 9.96 14.35C12.54 18.23 16.64 20.08 22 21H22C22 21 22 18 19 15C19 14.5 19 13.5 19 13C21 11 21 9 21 7C19 7 17 7.5 17 8Z"/></svg>
+      </div>
+      <div class="service-title">
+        <span data-lang="fr">Nettoiement</span>
+        <span data-lang="en">Cleaning</span>
+      </div>
+      <p class="service-desc">
+        <span data-lang="fr">Élimination sélective de la végétation nuisible afin de favoriser la croissance optimale des essences désirées.</span>
+        <span data-lang="en">Selective removal of harmful vegetation to promote optimal growth of desired tree species.</span>
+      </p>
+    </div>
+
+    <div class="service-card reveal reveal-delay-1">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+      </div>
+      <div class="service-title">
+        <span data-lang="fr">Dégagement mécanique</span>
+        <span data-lang="en">Mechanical clearing</span>
+      </div>
+      <p class="service-desc">
+        <span data-lang="fr">Dégagement de plantation mécanique pour assurer le bon développement des jeunes plants et leur accès à la lumière.</span>
+        <span data-lang="en">Mechanical plantation clearing to ensure proper development of young plants and their access to sunlight.</span>
+      </p>
+    </div>
+
+    <div class="service-card reveal reveal-delay-2">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 3L2 12h3v9h6v-6h2v6h6v-9h3L12 3zm0 12.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+      </div>
+      <div class="service-title">
+        <span data-lang="fr">Éclaircie précommerciale</span>
+        <span data-lang="en">Pre-commercial thinning</span>
+      </div>
+      <p class="service-desc">
+        <span data-lang="fr">Réduction de la densité des peuplements pour améliorer la vigueur et la qualité des arbres résiduels.</span>
+        <span data-lang="en">Reduction of stand density to improve the vigor and quality of remaining trees.</span>
+      </p>
+    </div>
+
+    <div class="service-card reveal reveal-delay-3">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 22q-2.075 0-3.9-.788-1.825-.787-3.175-2.137-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175Q6.275 3.575 8.1 2.788 9.925 2 12 2t3.9.788q1.825.787 3.175 2.137 1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175-1.35 1.35-3.175 2.137Q14.075 22 12 22zm0-2v-4.1q-.725-.225-1.212-.812-.488-.588-.488-1.313 0-.275.063-.512.062-.238.187-.463l-3.5-3.5Q6.65 10 6.325 10.85q-.325.85-.325 1.75 0 2.65 1.75 4.525T12 20zm1 0q1.6-.3 2.875-1.2 1.275-.9 2.1-2.175.825-1.275 1.175-2.75.35-1.475.225-3.025l-3.8 3.8q.125.225.188.463.062.237.062.512 0 .8-.5 1.362-.5.563-1.325.763V20zm-2.5-8.8q.2-.125.413-.188.212-.062.437-.062.225 0 .438.062.212.063.412.188l3.5-3.5q-.8-.7-1.75-1.05Q13.4 6.3 12.4 6.3q-1 0-1.95.35-.95.35-1.75 1.05l1.8 3.5z"/></svg>
+      </div>
+      <div class="service-title">
+        <span data-lang="fr">Plantation</span>
+        <span data-lang="en">Plantation</span>
+      </div>
+      <p class="service-desc">
+        <span data-lang="fr">Reboisement avec soin et expertise pour assurer la régénération et la pérennité des massifs forestiers.</span>
+        <span data-lang="en">Reforestation with care and expertise to ensure the regeneration and longevity of forest stands.</span>
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery" id="galerie">
+  <div class="gallery-header">
+    <div class="section-label">
+      <span data-lang="fr">Notre travail</span>
+      <span data-lang="en">Our work</span>
+    </div>
+    <h2>
+      <span data-lang="fr">La <em>forêt</em> en action</span>
+      <span data-lang="en">The <em>forest</em> in action</span>
+    </h2>
+    <p class="gallery-sub">
+      <span data-lang="fr">Un aperçu de nos chantiers forestiers à travers le Québec et l'Ontario.</span>
+      <span data-lang="en">A glimpse of our forestry sites across Québec and Ontario.</span>
+    </p>
+  </div>
+  <div class="gallery-grid">
+    <div class="gal-item reveal">
+      <img class="gal-img" src="https://static.wixstatic.com/media/c22c23_1ee4884e2b30431fbad0fbdd1f831a26~mv2_d_4934_2772_s_4_2.jpg" alt="Chantier forestier" onerror="this.style.display='none'">
+      <div class="gal-overlay"><span>Éclaircie</span></div>
+    </div>
+    <div class="gal-item reveal reveal-delay-1">
+      <img class="gal-img" src="https://static.wixstatic.com/media/c22c23_4e0db78ec66c466a947134da3abff0fa~mv2_d_4934_3289_s_4_2.jpg" alt="Plantation" onerror="this.style.display='none'">
+      <div class="gal-overlay"><span>Plantation</span></div>
+    </div>
+    <div class="gal-item reveal reveal-delay-2">
+      <img class="gal-img" src="https://static.wixstatic.com/media/c22c23_f382a644158d44fb93e82bc947c06440~mv2_d_5375_3289_s_4_2.jpg" alt="Forêt" onerror="this.style.display='none'">
+      <div class="gal-overlay"><span>Nettoiement</span></div>
+    </div>
+    <div class="gal-item reveal">
+      <img class="gal-img" src="https://static.wixstatic.com/media/c3c991_330835ab353d47aaa224223336d30211~mv2.jpg" alt="Débroussailleuse" onerror="this.style.display='none'">
+      <div class="gal-overlay"><span>Dégagement</span></div>
+    </div>
+    <div class="gal-item reveal reveal-delay-1">
+      <img class="gal-img" src="https://static.wixstatic.com/media/c22c23_499f1bb633144ef093cca278f41cdf5b~mv2_d_4934_3289_s_4_2.jpg" alt="Travaux forestiers" onerror="this.style.display='none'">
+      <div class="gal-overlay"><span>Sylviculture</span></div>
+    </div>
+    <div class="gal-item reveal reveal-delay-2">
+      <img class="gal-img" src="https://static.wixstatic.com/media/c22c23_7393d1dde57c482a86dc74a4d9ebddf9f000.jpg" alt="Équipe" onerror="this.style.display='none'">
+      <div class="gal-overlay"><span>Équipe</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section class="why">
+  <div class="why-inner">
+    <div>
+      <div class="section-label reveal">
+        <span data-lang="fr">Pourquoi nous</span>
+        <span data-lang="en">Why us</span>
+      </div>
+      <h2 class="reveal">
+        <span data-lang="fr">Un partenaire <em>de confiance</em> pour votre forêt</span>
+        <span data-lang="en">A <em>trusted partner</em> for your forest</span>
+      </h2>
+      <ul class="why-list">
+        <li class="why-item reveal">
+          <span class="why-num">01</span>
+          <div class="why-text">
+            <h3><span data-lang="fr">Expertise reconnue</span><span data-lang="en">Recognized expertise</span></h3>
+            <p><span data-lang="fr">Des années d'expérience sur le terrain dans les forêts québécoises et ontariennes.</span><span data-lang="en">Years of field experience in Québec and Ontario's forests.</span></p>
+          </div>
+        </li>
+        <li class="why-item reveal">
+          <span class="why-num">02</span>
+          <div class="why-text">
+            <h3><span data-lang="fr">Sécurité avant tout</span><span data-lang="en">Safety first</span></h3>
+            <p><span data-lang="fr">Une main-d'œuvre formée, certifiée et engagée pour un chantier sans accident.</span><span data-lang="en">A trained, certified workforce committed to accident-free job sites.</span></p>
+          </div>
+        </li>
+        <li class="why-item reveal">
+          <span class="why-num">03</span>
+          <div class="why-text">
+            <h3><span data-lang="fr">Approche durable</span><span data-lang="en">Sustainable approach</span></h3>
+            <p><span data-lang="fr">Nos méthodes respectent l'écosystème et favorisent la régénération naturelle.</span><span data-lang="en">Our methods respect the ecosystem and encourage natural regeneration.</span></p>
+          </div>
+        </li>
+        <li class="why-item reveal">
+          <span class="why-num">04</span>
+          <div class="why-text">
+            <h3><span data-lang="fr">Service personnalisé</span><span data-lang="en">Personalized service</span></h3>
+            <p><span data-lang="fr">Chaque mandat est unique. Nous adaptons nos interventions à vos besoins spécifiques.</span><span data-lang="en">Every mandate is unique. We adapt our interventions to your specific needs.</span></p>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div>
+      <div class="cta-card reveal">
+        <h3>
+          <span data-lang="fr">Prêt à donner vie à votre projet forestier?</span>
+          <span data-lang="en">Ready to bring your forestry project to life?</span>
+        </h3>
+        <p>
+          <span data-lang="fr">Contactez-nous dès aujourd'hui pour discuter de vos besoins. Nous offrons des évaluations gratuites et des soumissions détaillées.</span>
+          <span data-lang="en">Contact us today to discuss your needs. We offer free evaluations and detailed quotes.</span>
+        </p>
+        <a href="#contact" class="btn-primary">
+          <span data-lang="fr">Obtenir une soumission</span>
+          <span data-lang="en">Get a quote</span>
+        </a>
+        <p class="cta-contact">
+          <span data-lang="fr">Ou appelez-nous directement: </span>
+          <span data-lang="en">Or call us directly: </span>
+          <a href="tel:+18195921835">819-592-1835</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="section-label">
+    <span data-lang="fr">Contactez-nous</span>
+    <span data-lang="en">Contact us</span>
+  </div>
+  <h2>
+    <span data-lang="fr">Parlons de votre <em>projet</em></span>
+    <span data-lang="en">Let's talk about your <em>project</em></span>
+  </h2>
+  <div class="contact-grid">
+    <div class="contact-info reveal">
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        </div>
+        <div>
+          <div class="contact-label"><span data-lang="fr">Téléphone</span><span data-lang="en">Phone</span></div>
+          <div class="contact-val"><a href="tel:+18195921835">+1 819-592-1835</a></div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        </div>
+        <div>
+          <div class="contact-label">Courriel / Email</div>
+          <div class="contact-val"><a href="mailto:forethe.inc@gmail.com">forethe.inc@gmail.com</a></div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        </div>
+        <div>
+          <div class="contact-label"><span data-lang="fr">Adresse</span><span data-lang="en">Address</span></div>
+          <div class="contact-val">247 Rue de la Vaudaire<br>Gatineau, Québec J9A 0C5</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2.04C6.5 2.04 2 6.53 2 12.06C2 17.06 5.66 21.21 10.44 21.96V14.96H7.9V12.06H10.44V9.85C10.44 7.34 11.93 5.96 14.22 5.96C15.31 5.96 16.45 6.15 16.45 6.15V8.62H15.19C13.95 8.62 13.56 9.39 13.56 10.18V12.06H16.34L15.89 14.96H13.56V21.96A10 10 0 0 0 22 12.06C22 6.53 17.5 2.04 12 2.04Z"/></svg>
+        </div>
+        <div>
+          <div class="contact-label">Facebook</div>
+          <div class="contact-val"><a href="https://www.facebook.com/FORET-HE-INC-102294052394304" target="_blank">Forêt H.E Inc.</a></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-form reveal reveal-delay-2">
+      <div class="form-row">
+        <div class="form-group">
+          <label><span data-lang="fr">Prénom</span><span data-lang="en">First name</span></label>
+          <input type="text" placeholder="Jean">
+        </div>
+        <div class="form-group">
+          <label><span data-lang="fr">Nom</span><span data-lang="en">Last name</span></label>
+          <input type="text" placeholder="Tremblay">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Courriel / Email</label>
+        <input type="email" placeholder="jean.tremblay@email.com">
+      </div>
+      <div class="form-group">
+        <label><span data-lang="fr">Service requis</span><span data-lang="en">Service needed</span></label>
+        <select>
+          <option value="" disabled selected>
+            <span data-lang="fr">Sélectionnez un service</span>
+            <span data-lang="en">Select a service</span>
+          </option>
+          <option value="nettoiement">Nettoiement / Cleaning</option>
+          <option value="degagement">Dégagement mécanique / Mechanical clearing</option>
+          <option value="eclaircie">Éclaircie précommerciale / Pre-commercial thinning</option>
+          <option value="plantation">Plantation</option>
+          <option value="autre">Autre / Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea placeholder="Décrivez votre projet... / Describe your project..."></textarea>
+      </div>
+      <button class="btn-submit" onclick="handleSubmit(this)">Send message</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Forêt <span>H.E</span> Inc.</div>
+  <div class="footer-copy">© Forêt H.E Inc., 2024 — Tous droits réservés / All rights reserved</div>
+  <div class="footer-links">
+    <a href="#mission"><span data-lang="fr">Mission</span><span data-lang="en">Mission</span></a>
+    <a href="#services">Services</a>
+    <a href="#contact"><span data-lang="fr">Contact</span><span data-lang="en">Contact</span></a>
+  </div>
+</footer>
+
+<script>
+  // Hero slideshow
+  const slides = document.querySelectorAll('.hero-slide');
+  const dots = document.querySelectorAll('.hero-dot');
+  let currentSlide = 0;
+  let slideshowTimer;
+
+  function goToSlide(index) {
+    slides[currentSlide].classList.remove('active');
+    dots[currentSlide].classList.remove('active');
+    currentSlide = index;
+    slides[currentSlide].classList.add('active');
+    dots[currentSlide].classList.add('active');
+    clearInterval(slideshowTimer);
+    slideshowTimer = setInterval(nextSlide, 3000);
+  }
+
+  function nextSlide() {
+    goToSlide((currentSlide + 1) % slides.length);
+  }
+
+  slideshowTimer = setInterval(nextSlide, 3000);
+
+  // Navbar scroll
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Counter animation
+  function animateCounter(el, target, suffix = '') {
+    let start = 0; const duration = 2000;
+    const step = timestamp => {
+      if (!start) start = timestamp;
+      const progress = Math.min((timestamp - start) / duration, 1);
+      const val = Math.floor(progress * target);
+      el.textContent = val + suffix;
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  const statNums = document.querySelectorAll('.stat-num[data-target]');
+  const statObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const target = parseInt(e.target.dataset.target);
+        const suffix = target === 100 ? '%' : target >= 500 ? '+' : '+';
+        animateCounter(e.target, target, target >= 100 ? (target === 100 ? '%' : '+') : '+');
+        statObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  statNums.forEach(el => statObserver.observe(el));
+
+  // Language toggle - DISABLED (English only)
+  // const langBtn = document.getElementById('langBtn');
+  // let isEN = false;
+  // langBtn.addEventListener('click', () => {
+  //   isEN = !isEN;
+  //   document.body.classList.toggle('lang-en', isEN);
+  //   langBtn.textContent = isEN ? 'FR' : 'EN';
+  //   document.documentElement.lang = isEN ? 'en' : 'fr';
+  // });
+
+  // Form submit
+  function handleSubmit(btn) {
+    btn.textContent = '✓ Message sent!';
+    btn.style.background = '#3E7A59';
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.textContent = 'Send message';
+      btn.style.background = '';
+      btn.disabled = false;
+    }, 3000);
+  }
+</script>
+</body>
+</html>
