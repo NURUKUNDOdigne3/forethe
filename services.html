@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Services — Forêt H.E Inc.</title>
+<meta name="description" content="Forestry services from Forêt H.E Inc. — forest cleaning, mechanical clearing, pre-commercial thinning, and plantation across Québec and Ontario.">
+<link rel="icon" type="image/png" href="imgs/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -17,7 +19,7 @@
     --cream: #F7F3EC;
     --cream-dark: #EDE8DF;
     --charcoal: #1A1A1A;
-    --text-muted: #6B7B6E;
+    --text-muted: #7b796b;
     --white: #FFFFFF;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -43,7 +45,7 @@
     font-family: 'Cormorant Garamond', serif;
     font-size: 1.5rem; font-weight: 600;
     color: var(--white); letter-spacing: 0.05em;
-    text-decoration: none;
+    text-decoration: none; z-index: 1002;
   }
   .nav-logo span { color: var(--gold); }
   .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
@@ -59,6 +61,29 @@
     font-weight: 500 !important; transition: background 0.3s !important;
   }
   .nav-cta:hover { background: var(--gold-light) !important; color: var(--charcoal) !important; }
+  .nav-cta.active { background: var(--gold-light) !important; color: var(--charcoal) !important; }
+
+  /* Hamburger */
+  .nav-toggle {
+    display: none; background: none; border: none; cursor: pointer;
+    width: 28px; height: 20px; position: relative; padding: 0; z-index: 1002;
+  }
+  .nav-toggle span {
+    display: block; position: absolute; height: 2px; width: 100%;
+    background: var(--white); border-radius: 2px; left: 0;
+    transition: transform 0.3s ease, opacity 0.2s ease, top 0.3s ease;
+  }
+  .nav-toggle span:nth-child(1) { top: 0; }
+  .nav-toggle span:nth-child(2) { top: 9px; }
+  .nav-toggle span:nth-child(3) { top: 18px; }
+  .nav-toggle.open span:nth-child(1) { top: 9px; transform: rotate(45deg); }
+  .nav-toggle.open span:nth-child(2) { opacity: 0; }
+  .nav-toggle.open span:nth-child(3) { top: 9px; transform: rotate(-45deg); }
+  .nav-backdrop {
+    position: fixed; inset: 0; background: rgba(13,34,24,0.5);
+    opacity: 0; pointer-events: none; transition: opacity 0.35s ease; z-index: 999;
+  }
+  .nav-backdrop.open { opacity: 1; pointer-events: auto; }
 
   /* ── PAGE HERO ── */
   .page-hero {
@@ -311,24 +336,43 @@
     .intro-band { grid-template-columns: 1fr; }
     .intro-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); }
     .intro-item:last-child { border-bottom: none; }
-    .nav-links { display: none; }
+    .nav-toggle { display: block; }
+    .nav-links {
+      position: fixed; top: 0; right: 0; bottom: 0;
+      width: min(78vw, 320px);
+      background: var(--forest);
+      flex-direction: column; align-items: flex-start; justify-content: center;
+      gap: 1.75rem; padding: 5rem 2rem;
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: -10px 0 40px rgba(0,0,0,0.35);
+      z-index: 1001;
+    }
+    .nav-links.open { transform: translateX(0); }
+    .nav-links a { font-size: 1rem; }
+    .nav-cta { margin-top: 0.5rem; }
   }
 </style>
 </head>
 <body>
 
 <!-- NAV -->
-<nav>
-  <a href="forethe-website.html" class="nav-logo">
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">
     <img src="imgs/logo.png" alt="Forêt H.E Inc." style="height: 45px; width: auto;">
   </a>
-  <ul class="nav-links">
+  <ul class="nav-links" id="navLinks">
     <li><a href="index.html">Home</a></li>
     <li><a href="services.html" class="active">Services</a></li>
-    <li><a href="forethe-website.html#mission">About us</a></li>
-    <li><a href="forethe-website.html#contact" class="nav-cta">Contact us</a></li>
+    <li><a href="about.html">About us</a></li>
+    <li><a href="about.html#team">Team</a></li>
+    <li><a href="contact.html" class="nav-cta">Contact us</a></li>
   </ul>
+  <button class="nav-toggle" id="navToggle" aria-label="Open navigation menu" aria-expanded="false" aria-controls="navLinks">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+<div class="nav-backdrop" id="navBackdrop"></div>
 
 <!-- PAGE HERO -->
 <div class="page-hero">
@@ -388,7 +432,7 @@
         <li>Manual and mechanized methods available</li>
         <li>Applicable to both public and private forests</li>
       </ul>
-      <a href="forethe-website.html#contact" class="btn-primary">Request a quote</a>
+      <a href="contact.html" class="btn-primary">Request a quote</a>
     </div>
   </div>
 </div>
@@ -412,7 +456,7 @@
         <li>Large-scale area treatment capability</li>
         <li>Hydro-Québec right-of-way clearing</li>
       </ul>
-      <a href="forethe-website.html#contact" class="btn-primary">Request a quote</a>
+      <a href="contact.html" class="btn-primary">Request a quote</a>
     </div>
   </div>
 </div>
@@ -436,7 +480,7 @@
         <li>Reduced risk of windthrow and disease</li>
         <li>Prescription-based intervention plans</li>
       </ul>
-      <a href="forethe-website.html#contact" class="btn-primary">Request a quote</a>
+      <a href="contact.html" class="btn-primary">Request a quote</a>
     </div>
   </div>
 </div>
@@ -460,7 +504,7 @@
         <li>Post-planting survival monitoring</li>
         <li>Public, private, and Hydro-Québec mandates</li>
       </ul>
-      <a href="forethe-website.html#contact" class="btn-primary">Request a quote</a>
+      <a href="contact.html" class="btn-primary">Request a quote</a>
     </div>
   </div>
 </div>
@@ -500,7 +544,7 @@
   <h2 class="reveal">Ready to start your <em>forestry project</em>?</h2>
   <p class="reveal">We offer free site evaluations and detailed quotes. Contact us today and a member of our team will respond within 24 hours.</p>
   <div class="cta-btns reveal">
-    <a href="forethe-website.html#contact" class="btn-primary">Get a free quote</a>
+    <a href="contact.html" class="btn-primary">Get a free quote</a>
     <a href="tel:+18195921835" class="btn-outline">Call 819-592-1835</a>
   </div>
 </div>
@@ -510,13 +554,33 @@
   <div class="footer-logo">Forêt <span>H.E</span> Inc.</div>
   <div class="footer-copy">© Forêt H.E Inc., 2024 — All rights reserved</div>
   <div class="footer-links">
-    <a href="forethe-website.html#mission">About</a>
+    <a href="index.html">Home</a>
     <a href="services.html">Services</a>
-    <a href="forethe-website.html#contact">Contact</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
   </div>
 </footer>
 
 <script>
+  // ── Mobile navigation ──
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  const navBackdrop = document.getElementById('navBackdrop');
+
+  function setNav(open) {
+    navLinks.classList.toggle('open', open);
+    navToggle.classList.toggle('open', open);
+    navBackdrop.classList.toggle('open', open);
+    navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    navToggle.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+
+  navToggle.addEventListener('click', () => setNav(!navLinks.classList.contains('open')));
+  navBackdrop.addEventListener('click', () => setNav(false));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setNav(false)));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') setNav(false); });
+
   // Page hero slideshow
   const slides = document.querySelectorAll('.page-hero-slide');
   let current = 0;

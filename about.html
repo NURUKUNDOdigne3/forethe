@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us — Forêt H.E Inc.</title>
+<meta name="description" content="Forêt H.E Inc. is a forestry management company based in Gatineau, Québec, delivering silvicultural treatments across Québec and Ontario with certified, safety-focused crews.">
+<link rel="icon" type="image/png" href="imgs/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest: #1B3A2D;
+    --forest-mid: #2D5A42;
+    --forest-light: #3E7A59;
+    --sage: #7CB897;
+    --gold: #C9973A;
+    --gold-light: #E0B96A;
+    --cream: #F7F3EC;
+    --cream-dark: #EDE8DF;
+    --charcoal: #1A1A1A;
+    --text-muted: #6B7B6E;
+    --white: #FFFFFF;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--cream);
+    color: var(--charcoal);
+    overflow-x: hidden;
+  }
+
+  /* ── NAVBAR ── */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 1000;
+    padding: 1.2rem 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: all 0.4s ease;
+    background: rgba(27, 58, 45, 0.97);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 2px 30px rgba(0,0,0,0.25);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem; font-weight: 600;
+    color: var(--white); letter-spacing: 0.05em;
+    text-decoration: none; z-index: 1002;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
+  .nav-links a {
+    color: rgba(255,255,255,0.85); text-decoration: none;
+    font-size: 0.9rem; font-weight: 400; letter-spacing: 0.08em;
+    text-transform: uppercase; transition: color 0.3s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--gold-light); }
+  .nav-cta {
+    background: var(--gold); color: var(--white) !important;
+    padding: 0.55rem 1.4rem; border-radius: 2px;
+    font-weight: 500 !important; transition: background 0.3s !important;
+  }
+  .nav-cta:hover { background: var(--gold-light) !important; color: var(--charcoal) !important; }
+  .nav-cta.active { background: var(--gold-light) !important; color: var(--charcoal) !important; }
+
+  /* Hamburger */
+  .nav-toggle {
+    display: none; background: none; border: none; cursor: pointer;
+    width: 28px; height: 20px; position: relative; padding: 0; z-index: 1002;
+  }
+  .nav-toggle span {
+    display: block; position: absolute; height: 2px; width: 100%;
+    background: var(--white); border-radius: 2px; left: 0;
+    transition: transform 0.3s ease, opacity 0.2s ease, top 0.3s ease;
+  }
+  .nav-toggle span:nth-child(1) { top: 0; }
+  .nav-toggle span:nth-child(2) { top: 9px; }
+  .nav-toggle span:nth-child(3) { top: 18px; }
+  .nav-toggle.open span:nth-child(1) { top: 9px; transform: rotate(45deg); }
+  .nav-toggle.open span:nth-child(2) { opacity: 0; }
+  .nav-toggle.open span:nth-child(3) { top: 9px; transform: rotate(-45deg); }
+  .nav-backdrop {
+    position: fixed; inset: 0; background: rgba(13,34,24,0.5);
+    opacity: 0; pointer-events: none; transition: opacity 0.35s ease; z-index: 999;
+  }
+  .nav-backdrop.open { opacity: 1; pointer-events: auto; }
+
+  /* ── PAGE HERO ── */
+  .page-hero {
+    min-height: 55vh; position: relative;
+    display: flex; align-items: center; justify-content: flex-start;
+    overflow: hidden;
+  }
+  .page-hero-slides { position: absolute; inset: 0; z-index: 0; }
+  .page-hero-slide {
+    position: absolute; inset: 0;
+    background-size: cover; background-position: center;
+    opacity: 0; transition: opacity 1.2s ease-in-out;
+  }
+  .page-hero-slide.active { opacity: 1; }
+  .page-hero-slide::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(160deg, rgba(13,34,24,0.82) 0%, rgba(27,58,45,0.75) 60%, rgba(45,90,66,0.7) 100%);
+  }
+  .page-hero-content {
+    position: relative; z-index: 2;
+    padding: 8rem 5% 4rem;
+    animation: fadeUp 0.9s ease both;
+  }
+  .page-hero-eyebrow {
+    display: inline-block;
+    font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold-light); font-weight: 500;
+    border-top: 1px solid var(--gold); border-bottom: 1px solid var(--gold);
+    padding: 0.3rem 1rem; margin-bottom: 1.2rem;
+  }
+  .page-hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-weight: 300; line-height: 1.1;
+    color: var(--white); margin-bottom: 1rem;
+  }
+  .page-hero h1 em { font-style: italic; color: var(--sage); }
+  .page-hero-sub {
+    font-size: 1.05rem; color: rgba(255,255,255,0.65);
+    max-width: 540px; line-height: 1.7; font-weight: 300;
+  }
+
+  /* ── FACTS BAND ── */
+  .intro-band {
+    background: var(--forest);
+    padding: 3rem 5%;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+  }
+  .intro-item {
+    text-align: center; padding: 1rem 1.5rem;
+    border-right: 1px solid rgba(255,255,255,0.1);
+  }
+  .intro-item:last-child { border-right: none; }
+  .intro-icon {
+    width: 48px; height: 48px; background: rgba(201,151,58,0.15);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1rem;
+  }
+  .intro-icon svg { width: 22px; height: 22px; fill: var(--gold); }
+  .intro-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem; color: var(--white); font-weight: 300; margin-bottom: 0.3rem;
+  }
+  .intro-label {
+    font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.5); font-weight: 400;
+  }
+
+  /* ── SHARED SECTION BITS ── */
+  .section-label {
+    font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.2em;
+    color: var(--gold); font-weight: 500; margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .section-label::before { content: ''; width: 28px; height: 1px; background: var(--gold); }
+
+  /* ── STORY ── */
+  .story-wrap { padding: 6rem 5%; background: var(--cream); }
+  .story-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 5rem; align-items: center;
+  }
+  .story-image-wrap {
+    position: relative; border-radius: 4px; overflow: hidden;
+    aspect-ratio: 4/3;
+  }
+  .story-image-wrap img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+  .story-image-wrap:hover img { transform: scale(1.04); }
+  .story-image-badge {
+    position: absolute; bottom: 1.5rem; left: 1.5rem;
+    background: var(--gold); color: var(--white);
+    font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+    font-weight: 500; padding: 0.4rem 1rem; border-radius: 2px;
+  }
+  .story-text h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 300; line-height: 1.2; color: var(--forest);
+    margin-bottom: 1.5rem;
+  }
+  .story-text h2 em { font-style: italic; color: var(--forest-light); }
+  .story-text p {
+    font-size: 1rem; line-height: 1.85; color: #4a5a4e;
+    font-weight: 300; margin-bottom: 1.5rem;
+  }
+  .story-text p:last-child { margin-bottom: 0; }
+
+  /* ── MISSION / VISION / VALUES ── */
+  .pillars-wrap { background: var(--forest); padding: 6rem 5%; }
+  .pillars-inner { max-width: 1200px; margin: 0 auto; }
+  .pillars-wrap .section-label { color: var(--gold-light); }
+  .pillars-wrap .section-label::before { background: var(--gold-light); }
+  .pillars-wrap h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 300; color: var(--white); margin-bottom: 3.5rem;
+  }
+  .pillars-wrap h2 em { font-style: italic; color: var(--sage); }
+  .pillars-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  .pillar {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 3px; padding: 2.25rem 2rem;
+    transition: transform 0.3s, border-color 0.3s, background 0.3s;
+  }
+  .pillar:hover {
+    transform: translateY(-5px);
+    border-color: rgba(201,151,58,0.4);
+    background: rgba(255,255,255,0.06);
+  }
+  .pillar-icon {
+    width: 52px; height: 52px; background: rgba(201,151,58,0.15);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+  .pillar-icon svg { width: 24px; height: 24px; fill: var(--gold); }
+  .pillar h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem; font-weight: 300; color: var(--white); margin-bottom: 0.9rem;
+  }
+  .pillar p {
+    font-size: 0.92rem; color: rgba(255,255,255,0.55);
+    line-height: 1.8; font-weight: 300;
+  }
+
+  /* ── WHY US ── */
+  .why-wrap { background: var(--cream-dark); padding: 6rem 5%; }
+  .why-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 5rem; align-items: center;
+  }
+  .why-text h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 300; line-height: 1.2; color: var(--forest); margin-bottom: 1.5rem;
+  }
+  .why-text h2 em { font-style: italic; color: var(--forest-light); }
+  .why-text > p {
+    font-size: 1rem; line-height: 1.85; color: #4a5a4e;
+    font-weight: 300; margin-bottom: 2rem;
+  }
+  .why-list { list-style: none; display: flex; flex-direction: column; gap: 1.5rem; }
+  .why-item { display: flex; gap: 1.1rem; align-items: flex-start; }
+  .why-item-icon {
+    width: 38px; height: 38px; flex-shrink: 0;
+    background: rgba(201,151,58,0.14); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .why-item-icon svg { width: 17px; height: 17px; fill: var(--gold); }
+  .why-item h4 {
+    font-size: 0.95rem; font-weight: 500; color: var(--forest);
+    margin-bottom: 0.35rem;
+  }
+  .why-item p { font-size: 0.9rem; color: #4a5a4e; font-weight: 300; line-height: 1.7; }
+  .why-image-wrap {
+    position: relative; border-radius: 4px; overflow: hidden; aspect-ratio: 3/4;
+  }
+  .why-image-wrap img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* ── TEAM ── */
+  .team-wrap { background: var(--cream); padding: 6rem 5%; scroll-margin-top: 80px; }
+  .team-inner { max-width: 1200px; margin: 0 auto; }
+  .team-head { text-align: center; margin-bottom: 3.5rem; }
+  .team-head .section-label { justify-content: center; }
+  .team-head h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 300; color: var(--forest); margin-bottom: 1rem;
+  }
+  .team-head h2 em { font-style: italic; color: var(--forest-light); }
+  .team-head p {
+    font-size: 1rem; color: var(--text-muted); max-width: 580px;
+    margin: 0 auto; line-height: 1.7; font-weight: 300;
+  }
+  .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  .team-card {
+    background: var(--white);
+    border: 1px solid rgba(27,58,45,0.08);
+    border-radius: 3px; overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .team-card:hover { transform: translateY(-5px); box-shadow: 0 16px 40px rgba(27,58,45,0.1); }
+  .team-photo { position: relative; aspect-ratio: 4/3; overflow: hidden; background: var(--forest-mid); }
+  .team-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+  .team-card:hover .team-photo img { transform: scale(1.05); }
+  .team-photo::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(13,34,24,0.55), transparent 55%);
+  }
+  .team-body { padding: 1.75rem; }
+  .team-role {
+    font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em;
+    color: var(--gold); font-weight: 500; margin-bottom: 0.6rem;
+  }
+  .team-body h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem; font-weight: 400; color: var(--forest); margin-bottom: 0.75rem;
+  }
+  .team-body p { font-size: 0.9rem; color: #4a5a4e; font-weight: 300; line-height: 1.75; }
+  .team-note {
+    text-align: center; margin-top: 3rem;
+    font-size: 0.95rem; color: var(--text-muted); font-weight: 300;
+  }
+  .team-note a { color: var(--forest); font-weight: 400; }
+
+  /* ── COMMITMENTS ── */
+  .commit-wrap { background: var(--cream-dark); padding: 6rem 5%; }
+  .commit-inner { max-width: 1000px; margin: 0 auto; text-align: center; }
+  .commit-inner .section-label { justify-content: center; }
+  .commit-inner h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 300; color: var(--forest); margin-bottom: 1rem;
+  }
+  .commit-inner h2 em { font-style: italic; color: var(--forest-light); }
+  .commit-inner > p {
+    font-size: 1rem; color: var(--text-muted); max-width: 580px;
+    margin: 0 auto 3.5rem; line-height: 1.7; font-weight: 300;
+  }
+  .commit-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+  .commit-item { text-align: center; }
+  .commit-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.75rem; font-weight: 300; color: var(--gold);
+    line-height: 1; margin-bottom: 0.75rem;
+  }
+  .commit-item h4 {
+    font-size: 0.85rem; font-weight: 500; color: var(--forest);
+    text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem;
+  }
+  .commit-item p { font-size: 0.85rem; color: var(--text-muted); font-weight: 300; line-height: 1.7; }
+
+  /* ── CTA ── */
+  .cta-wrap { background: var(--forest); padding: 5rem 5%; text-align: center; }
+  .cta-wrap h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 300; color: var(--white); margin-bottom: 1rem;
+  }
+  .cta-wrap h2 em { font-style: italic; color: var(--sage); }
+  .cta-wrap p {
+    font-size: 1rem; color: rgba(255,255,255,0.55); max-width: 520px;
+    margin: 0 auto 2.5rem; line-height: 1.7; font-weight: 300;
+  }
+  .cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--gold); color: var(--white);
+    padding: 0.9rem 2.2rem; text-decoration: none;
+    font-size: 0.875rem; letter-spacing: 0.08em; text-transform: uppercase;
+    font-weight: 500; transition: all 0.3s; border-radius: 2px;
+    display: inline-block; border: none; cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+  }
+  .btn-primary:hover { background: var(--gold-light); color: var(--charcoal); transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent; color: var(--white);
+    border: 1px solid rgba(255,255,255,0.5);
+    padding: 0.85rem 2rem; text-decoration: none;
+    font-size: 0.875rem; letter-spacing: 0.08em; text-transform: uppercase;
+    font-weight: 400; transition: all 0.3s; border-radius: 2px;
+    display: inline-block;
+  }
+  .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,0.1); transform: translateY(-2px); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #0e2219;
+    padding: 3rem 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1.5rem;
+  }
+  .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--white); font-weight: 400; }
+  .footer-logo span { color: var(--gold); }
+  .footer-copy { color: rgba(255,255,255,0.3); font-size: 0.8rem; }
+  .footer-links { display: flex; gap: 2rem; flex-wrap: wrap; }
+  .footer-links a { color: rgba(255,255,255,0.4); font-size: 0.8rem; text-decoration: none; transition: color 0.3s; }
+  .footer-links a:hover { color: var(--gold-light); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(25px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .reveal { opacity: 0; transform: translateY(25px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1000px) {
+    .pillars-grid, .team-grid { grid-template-columns: 1fr; }
+    .commit-grid { grid-template-columns: repeat(2, 1fr); gap: 2.5rem; }
+    .intro-band { grid-template-columns: repeat(2, 1fr); }
+    .intro-item:nth-child(2) { border-right: none; }
+    .intro-item:nth-child(1), .intro-item:nth-child(2) {
+      border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 2rem;
+    }
+    .intro-item:nth-child(3), .intro-item:nth-child(4) { padding-top: 2rem; }
+  }
+  @media (max-width: 900px) {
+    .nav-toggle { display: block; }
+    .nav-links {
+      position: fixed; top: 0; right: 0; bottom: 0;
+      width: min(78vw, 320px);
+      background: var(--forest);
+      flex-direction: column; align-items: flex-start; justify-content: center;
+      gap: 1.75rem; padding: 5rem 2rem;
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: -10px 0 40px rgba(0,0,0,0.35);
+      z-index: 1001;
+    }
+    .nav-links.open { transform: translateX(0); }
+    .nav-links a { font-size: 1rem; }
+    .nav-cta { margin-top: 0.5rem; }
+    .story-inner, .why-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+    .why-image-wrap { aspect-ratio: 4/3; order: -1; }
+    .story-wrap, .pillars-wrap, .why-wrap, .team-wrap, .commit-wrap { padding: 4rem 5%; }
+  }
+  @media (max-width: 600px) {
+    .intro-band { grid-template-columns: 1fr; }
+    .intro-item {
+      border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding: 1.5rem 1rem;
+    }
+    .intro-item:last-child { border-bottom: none; }
+    .commit-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">
+    <img src="imgs/logo.png" alt="Forêt H.E Inc." style="height: 45px; width: auto;">
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="about.html" class="active">About us</a></li>
+    <li><a href="about.html#team">Team</a></li>
+    <li><a href="contact.html" class="nav-cta">Contact us</a></li>
+  </ul>
+  <button class="nav-toggle" id="navToggle" aria-label="Open navigation menu" aria-expanded="false" aria-controls="navLinks">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="nav-backdrop" id="navBackdrop"></div>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-slides">
+    <div class="page-hero-slide active" style="background-image: url('imgs/hero_image_2.png')"></div>
+    <div class="page-hero-slide" style="background-image: url('imgs/hero_image_3.png')"></div>
+    <div class="page-hero-slide" style="background-image: url('imgs/hero_image.png')"></div>
+  </div>
+  <div class="page-hero-content">
+    <div class="page-hero-eyebrow">Rooted in the Outaouais</div>
+    <h1>About <em>us</em></h1>
+    <p class="page-hero-sub">Forêt H.E Inc. is a forestry management company built on skilled hands, careful planning, and a long-term view of the forest.</p>
+  </div>
+</div>
+
+<!-- FACTS BAND -->
+<div class="intro-band">
+  <div class="intro-item">
+    <div class="intro-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+    </div>
+    <div class="intro-val">Gatineau, Québec</div>
+    <div class="intro-label">Our home base</div>
+  </div>
+  <div class="intro-item">
+    <div class="intro-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+    </div>
+    <div class="intro-val">Safety First</div>
+    <div class="intro-label">On every single site</div>
+  </div>
+  <div class="intro-item">
+    <div class="intro-icon">
+      <svg viewBox="0 0 24 24"><path d="M17 8C8 10 5.9 16.17 3.82 21.34l1.89.66.95-2.3c.48.17.98.3 1.34.3C19 20 22 3 22 3c-1 2-8 2.25-13 3.25S2 11.5 2 13.5s1.75 3.75 1.75 3.75C7 8 17 8 17 8z"/></svg>
+    </div>
+    <div class="intro-val">4 Core Treatments</div>
+    <div class="intro-label">Silvicultural expertise</div>
+  </div>
+  <div class="intro-item">
+    <div class="intro-icon">
+      <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95c-.32-1.25-.78-2.45-1.38-3.56 1.84.63 3.37 1.9 4.33 3.56zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2s.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56-1.84-.63-3.37-1.9-4.33-3.56zm2.95-8H5.08c.96-1.66 2.49-2.93 4.33-3.56C8.81 5.55 8.35 6.75 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2s.07-1.35.16-2h4.68c.09.65.16 1.32.16 2s-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95c-.96 1.65-2.49 2.93-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2s-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/></svg>
+    </div>
+    <div class="intro-val">Québec &amp; Ontario</div>
+    <div class="intro-label">Where we operate</div>
+  </div>
+</div>
+
+<!-- OUR STORY -->
+<div class="story-wrap">
+  <div class="story-inner reveal">
+    <div class="story-image-wrap">
+      <img src="imgs/hero_image.png" alt="Forêt H.E Inc. crew working in the forest">
+      <div class="story-image-badge">Who we are</div>
+    </div>
+    <div class="story-text">
+      <div class="section-label">Our story</div>
+      <h2>A company built in the <em>forest</em>, not in an office</h2>
+      <p>Forêt H.E Inc. was founded on a simple conviction: good forestry is done by people who know the ground they stand on. From our base in Gatineau, we deliver silvicultural treatments for public forests, private woodlots, and Hydro-Québec mandates across Québec and Ontario.</p>
+      <p>Every contract we take on starts the same way — boots on the site, an honest assessment of what the stand needs, and a plan that serves the forest's long-term health rather than the shortest route to a finished invoice.</p>
+      <p>Our crews are trained, certified, and equipped for demanding terrain. That combination of skill and care is what keeps landowners and forest managers coming back to us season after season.</p>
+    </div>
+  </div>
+</div>
+
+<!-- MISSION / VISION / VALUES -->
+<div class="pillars-wrap">
+  <div class="pillars-inner">
+    <div class="section-label reveal">What drives us</div>
+    <h2 class="reveal">Mission, vision &amp; <em>values</em></h2>
+    <div class="pillars-grid">
+      <div class="pillar reveal">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>
+        </div>
+        <h3>Our mission</h3>
+        <p>To deliver professional forestry management services that improve the health, productivity, and long-term value of every stand we touch — carried out safely, on schedule, and to the standard we would want on our own land.</p>
+      </div>
+      <div class="pillar reveal reveal-delay-1">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+        </div>
+        <h3>Our vision</h3>
+        <p>To be the forestry contractor of choice in the Outaouais and beyond — recognised not for the size of our fleet, but for the quality of our work, the safety of our crews, and the forests we leave better than we found them.</p>
+      </div>
+      <div class="pillar reveal reveal-delay-2">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        </div>
+        <h3>Our values</h3>
+        <p>Safety before speed. Honesty in every quote and every report. Respect for the land, for our clients, and for the people who do the work. And a stubborn commitment to finishing what we start, properly.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WHY CHOOSE US -->
+<div class="why-wrap">
+  <div class="why-inner reveal">
+    <div class="why-text">
+      <div class="section-label">Why work with us</div>
+      <h2>What sets our <em>crews</em> apart</h2>
+      <p>Forestry contracts live or die on execution. Here is what you can count on when Forêt H.E Inc. is on your site.</p>
+      <ul class="why-list">
+        <li class="why-item">
+          <div class="why-item-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+          </div>
+          <div>
+            <h4>Certified, trained crews</h4>
+            <p>Every operator is certified for the equipment they run, with safety protocols applied on every site, every day.</p>
+          </div>
+        </li>
+        <li class="why-item">
+          <div class="why-item-icon">
+            <svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm-2 14l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+          </div>
+          <div>
+            <h4>Prescription-based work</h4>
+            <p>We work to a written intervention plan, not guesswork — so you know exactly what was done and why.</p>
+          </div>
+        </li>
+        <li class="why-item">
+          <div class="why-item-icon">
+            <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+          </div>
+          <div>
+            <h4>On schedule, in season</h4>
+            <p>Silviculture has a narrow window. We plan mobilisation carefully and keep you informed of progress throughout.</p>
+          </div>
+        </li>
+        <li class="why-item">
+          <div class="why-item-icon">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+          </div>
+          <div>
+            <h4>Documented results</h4>
+            <p>Each project closes with a completion report — photos, mapped areas, and recommendations for what comes next.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="why-image-wrap">
+      <img src="imgs/hero_image_3.png" alt="Silvicultural treatment in progress">
+    </div>
+  </div>
+</div>
+
+<!-- TEAM -->
+<div class="team-wrap" id="team">
+  <div class="team-inner">
+    <div class="team-head reveal">
+      <div class="section-label">The people behind the work</div>
+      <h2>Our <em>team</em></h2>
+      <p>Forestry is a team discipline. Ours brings together planning, field operations, and safety training — each one essential to a treatment done right.</p>
+    </div>
+
+    <!--
+      TEAM MEMBERS: the three cards below describe the roles within the company.
+      To feature real people instead, replace the team-role / h3 / p content with
+      each person's title, name, and short bio, and swap the photo in team-photo
+      for their picture (add it to the imgs/ folder first).
+    -->
+    <div class="team-grid">
+      <div class="team-card reveal">
+        <div class="team-photo">
+          <img src="imgs/hero_image.png" alt="Field operations crew at work">
+        </div>
+        <div class="team-body">
+          <div class="team-role">Field operations</div>
+          <h3>The crews</h3>
+          <p>Certified brushcutter and mulcher operators, planters, and thinning specialists. They carry out the treatment on the ground — in steep terrain, dense stands, and full summer heat — to the specification set out in the plan.</p>
+        </div>
+      </div>
+      <div class="team-card reveal reveal-delay-1">
+        <div class="team-photo">
+          <img src="imgs/hero_image_2.png" alt="Assessing forest stand conditions">
+        </div>
+        <div class="team-body">
+          <div class="team-role">Silviculture &amp; planning</div>
+          <h3>The planners</h3>
+          <p>They walk the site before anyone else does: assessing stand density, species composition, and regeneration, then writing the prescription that tells the crew exactly what to cut, what to keep, and why.</p>
+        </div>
+      </div>
+      <div class="team-card reveal reveal-delay-2">
+        <div class="team-photo">
+          <img src="imgs/hero_image_3.png" alt="Safety briefing before field operations">
+        </div>
+        <div class="team-body">
+          <div class="team-role">Safety &amp; training</div>
+          <h3>The standard-keepers</h3>
+          <p>Responsible for certification, equipment checks, and the daily briefings that keep our record clean. No crew starts a shift without a safety plan for that specific site and that specific day.</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="team-note reveal">Interested in joining a crew? <a href="contact.html">Get in touch</a> — we are always glad to hear from skilled forestry workers.</p>
+  </div>
+</div>
+
+<!-- COMMITMENTS -->
+<div class="commit-wrap">
+  <div class="commit-inner">
+    <div class="section-label reveal">How we operate</div>
+    <h2 class="reveal">Our <em>commitments</em></h2>
+    <p class="reveal">Four promises we make to every client, on every contract, regardless of its size.</p>
+    <div class="commit-grid">
+      <div class="commit-item reveal">
+        <div class="commit-num">01</div>
+        <h4>Free assessment</h4>
+        <p>Site visits and written quotes at no cost and no obligation.</p>
+      </div>
+      <div class="commit-item reveal reveal-delay-1">
+        <div class="commit-num">02</div>
+        <h4>24-hour reply</h4>
+        <p>Every enquiry answered within one business day.</p>
+      </div>
+      <div class="commit-item reveal reveal-delay-2">
+        <div class="commit-num">03</div>
+        <h4>Transparent pricing</h4>
+        <p>Detailed scope and costs agreed before work begins.</p>
+      </div>
+      <div class="commit-item reveal reveal-delay-3">
+        <div class="commit-num">04</div>
+        <h4>Full follow-up</h4>
+        <p>A completion report on every project we deliver.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-wrap">
+  <h2>Let's talk about your <em>forest</em></h2>
+  <p>Whether you manage a public mandate or a private woodlot, we would be glad to walk the site with you and tell you honestly what it needs.</p>
+  <div class="cta-btns">
+    <a href="contact.html" class="btn-primary">Get a free quote</a>
+    <a href="services.html" class="btn-outline">Browse our services</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Forêt <span>H.E</span> Inc.</div>
+  <div class="footer-copy">© Forêt H.E Inc., 2024 — All rights reserved</div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="services.html">Services</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</footer>
+
+<script>
+  // ── Mobile navigation ──
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  const navBackdrop = document.getElementById('navBackdrop');
+
+  function setNav(open) {
+    navLinks.classList.toggle('open', open);
+    navToggle.classList.toggle('open', open);
+    navBackdrop.classList.toggle('open', open);
+    navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    navToggle.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+
+  navToggle.addEventListener('click', () => setNav(!navLinks.classList.contains('open')));
+  navBackdrop.addEventListener('click', () => setNav(false));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setNav(false)));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') setNav(false); });
+
+  // ── Page hero slideshow ──
+  const slides = document.querySelectorAll('.page-hero-slide');
+  let current = 0;
+  setInterval(() => {
+    slides[current].classList.remove('active');
+    current = (current + 1) % slides.length;
+    slides[current].classList.add('active');
+  }, 3000);
+
+  // ── Reveal on scroll ──
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
